@@ -30,8 +30,6 @@ from aws_xray_sdk.ext.flask.middleware import XRayMiddleware
 import watchtower
 import logging
 from time import strftime
-
-# Configuring Logger to Use CloudWatch
 LOGGER = logging.getLogger(__name__)
 LOGGER.setLevel(logging.DEBUG)
 console_handler = logging.StreamHandler()
@@ -40,33 +38,34 @@ LOGGER.addHandler(console_handler)
 LOGGER.addHandler(cw_handler)
 LOGGER.info("HomeActivities")
 LOGGER.info("Test===")
-# HoneyComb ---------
-# Initialize tracing and an exporter that can send data to Honeycomb
-provider = TracerProvider()
-processor = BatchSpanProcessor(OTLPSpanExporter())
-provider.add_span_processor(processor)
 
 # X-RAY 
 xray_url = os.getenv("AWS_XRAY_URL")
 xray_recorder.configure(service='backend-flask', dynamic_naming=xray_url)
 
-
-# Show this in the logs within the backend-flask app (STDOUT)
+# HoneyComb ---------
+provider = TracerProvider()
+processor = BatchSpanProcessor(OTLPSpanExporter())
+provider.add_span_processor(processor)
 simple_processor = SimpleSpanProcessor(ConsoleSpanExporter())
 provider.add_span_processor(simple_processor)
-
 trace.set_tracer_provider(provider)
 tracer = trace.get_tracer(__name__)
 
+# Rollbar
+import rollbar
+import rollbar.contrib.flask
+from flask import got_request_exception
+
+
 app = Flask(__name__)
 
+# X-RAY 
 XRayMiddleware(app, xray_recorder)
 
 # HoneyComb ---------
-# Initialize automatic instrumentation with Flask
 FlaskInstrumentor().instrument_app(app)
 RequestsInstrumentor().instrument()
-
 
 frontend = os.getenv('FRONTEND_URL')
 backend = os.getenv('BACKEND_URL')
@@ -79,11 +78,31 @@ cors = CORS(
   methods="OPTIONS,GET,HEAD,POST"
 )
 
+# cloudwatch logs ----
 @app.after_request
 def after_request(response):
     timestamp = strftime('[%Y-%b-%d %H:%M]')
     LOGGER.error('%s %s %s %s %s %s', timestamp, request.remote_addr, request.method, request.scheme, request.full_path, response.status)
     return response
+
+# Rollbar
+rollbar_access_token = os.getenv('ROLLBAR_ACCESS_TOKEN')
+@app.before_request
+def init_rollbar():
+    """init rollbar module"""
+    rollbar.init(
+        # access token
+        rollbar_access_token,
+        # environment name
+        'production',
+        # server root directory, makes tracebacks prettier
+        root=os.path.dirname(os.path.realpath(__file__)),
+        # flask already sets up logging
+        allow_logging_basic_config=False)
+
+    # send exceptions from `app` to rollbar, using flask's signal system.
+    got_request_exception.connect(rollbar.contrib.flask.report_exception, app)
+
 
 @app.route("/api/message_groups", methods=['GET'])
 def data_message_groups():
@@ -172,6 +191,12 @@ def data_activities_reply(activity_uuid):
   else:
     return model['data'], 200
   return
+  
+# Rollbar
+@app.route('/rollbar/test')
+def rollbar_test():
+    rollbar.report_message('Hello World!', 'warning')
+    return "Hello World!"
 
 if __name__ == "__main__":
   app.run(debug=True)
