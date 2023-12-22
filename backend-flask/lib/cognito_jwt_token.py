@@ -33,6 +33,8 @@ class CognitoJwtToken:
 
 
     def _load_jwk_keys(self):
+        print("region",self.region)
+        print("user_pool_id",self.user_pool_id)
         keys_url = f"https://cognito-idp.{self.region}.amazonaws.com/{self.user_pool_id}/.well-known/jwks.json"
         try:
             response = self.request_client(keys_url)
@@ -52,17 +54,12 @@ class CognitoJwtToken:
         kid = headers["kid"]
         # search for the kid in the downloaded public keys
         key_index = -1
-        print(len(self.jwk_keys))
         for i in range(len(self.jwk_keys)):
-            print("kid",kid)
-            print("keys",self.jwk_keys[i])
             if kid == self.jwk_keys[i]["kid"]:
                 key_index = i
                 break
         if key_index == -1:
-            print("test2")
             raise TokenVerifyError("Public key not found in jwks.json")
-        print("test3")
         return self.jwk_keys[key_index]
 
     @staticmethod
@@ -108,15 +105,11 @@ class CognitoJwtToken:
             raise TokenVerifyError("No token provided")
 
         headers = self._extract_headers(token)
-        print("headers",headers)
         pkey_data = self._find_pkey(headers)
-        print("pkey_data",pkey_data)
         self._verify_signature(token, pkey_data)
 
         claims = self._extract_claims(token)
-        print("claims1",claims)
         self._check_expiration(claims, current_time)
         self._check_audience(claims)
         self.claims = claims 
-        print("claims2",claims)
         return claims
