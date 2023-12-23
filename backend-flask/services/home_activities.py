@@ -8,7 +8,6 @@ class HomeActivities:
   def run(cognito_user_id=None):
     #logger.info("HomeActivities")
       # now = datetime.now(timezone.utc).astimezone()
-      print("test11")
       sql = query_wrap_array("""
       SELECT
         activities.uuid,
@@ -25,13 +24,10 @@ class HomeActivities:
       LEFT JOIN public.users ON users.uuid = activities.user_uuid
       ORDER BY activities.created_at DESC
       """)
-      print(sql)
       with pool.connection() as conn:
         with conn.cursor() as cur:
           cur.execute(sql)
           # this will return a tuple
           # the first field being the data
           json = cur.fetchone()
-          print("test22")
-          print(json[0])
       return json[0]
