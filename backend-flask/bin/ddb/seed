@@ -34,11 +34,11 @@ def get_user_uuids():
         )
   """
   users = db.query_array_json(sql,{
-    'my_handle':  'andrewbrown',
-    'other_handle': 'bayko'
+    'my_handle':  'tin2003tin',
+    'other_handle': 'job_universe'
   })
-  my_user    = next((item for item in users if item["handle"] == 'andrewbrown'), None)
-  other_user = next((item for item in users if item["handle"] == 'bayko'), None)
+  my_user    = next((item for item in users if item["handle"] == 'tin2003tin'), None)
+  other_user = next((item for item in users if item["handle"] == 'job_universe'), None)
   results = {
     'my_user': my_user,
     'other_user': other_user
@@ -49,6 +49,7 @@ def get_user_uuids():
 
 def create_message_group(client,message_group_uuid, my_user_uuid, last_message_at=None, message=None, other_user_uuid=None, other_user_display_name=None, other_user_handle=None):
   table_name = 'cruddur-messages'
+  print("my_user_uuid1:",my_user_uuid)
   record = {
     'pk':   {'S': f"GRP#{my_user_uuid}"},
     'sk':   {'S': last_message_at},
@@ -84,7 +85,7 @@ def create_message(client,message_group_uuid, created_at, message, my_user_uuid,
   # print the response
   print(response)
 
-message_group_uuid = "5ae290ed-55d1-47a0-bc6d-fe2bc2700399" 
+message_group_uuid = "8f49c16b-a7d1-4ef7-b2b5-f051d855dcec" 
 now = datetime.now(timezone.utc).astimezone()
 users = get_user_uuids()
 
@@ -218,25 +219,25 @@ Person 2: Definitely. I think his character is a great example of the show's abi
 """
 
 
-lines = conversation.lstrip('\n').rstrip('\n').split('\n')
-for i in range(len(lines)):
-  if lines[i].startswith('Person 1: '):
-    key = 'my_user'
-    message = lines[i].replace('Person 1: ', '')
-  elif lines[i].startswith('Person 2: '):
-    key = 'other_user'
-    message = lines[i].replace('Person 2: ', '')
-  else:
-    print(lines[i])
-    raise 'invalid line'
+# lines = conversation.lstrip('\n').rstrip('\n').split('\n')
+# for i in range(len(lines)):
+#   if lines[i].startswith('Person 1: '):
+#     key = 'my_user'
+#     message = lines[i].replace('Person 1: ', '')
+#   elif lines[i].startswith('Person 2: '):
+#     key = 'other_user'
+#     message = lines[i].replace('Person 2: ', '')
+#   else:
+#     print(lines[i])
+#     raise 'invalid line'
 
-  created_at = (now + timedelta(minutes=i)).isoformat()
-  create_message(
-    client=ddb,
-    message_group_uuid=message_group_uuid,
-    created_at=created_at,
-    message=message,
-    my_user_uuid=users[key]['uuid'],
-    my_user_display_name=users[key]['display_name'],
-    my_user_handle=users[key]['handle']
-  )
+#   created_at = (now + timedelta(minutes=i)).isoformat()
+#   create_message(
+#     client=ddb,
+#     message_group_uuid=message_group_uuid,
+#     created_at=created_at,
+#     message=message,
+#     my_user_uuid=users[key]['uuid'],
+#     my_user_display_name=users[key]['display_name'],
+#     my_user_handle=users[key]['handle']
+#   )
