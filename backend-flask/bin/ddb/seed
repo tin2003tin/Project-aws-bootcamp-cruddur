@@ -219,25 +219,25 @@ Person 2: Definitely. I think his character is a great example of the show's abi
 """
 
 
-# lines = conversation.lstrip('\n').rstrip('\n').split('\n')
-# for i in range(len(lines)):
-#   if lines[i].startswith('Person 1: '):
-#     key = 'my_user'
-#     message = lines[i].replace('Person 1: ', '')
-#   elif lines[i].startswith('Person 2: '):
-#     key = 'other_user'
-#     message = lines[i].replace('Person 2: ', '')
-#   else:
-#     print(lines[i])
-#     raise 'invalid line'
+lines = conversation.lstrip('\n').rstrip('\n').split('\n')
+for i in range(len(lines)):
+  if lines[i].startswith('Person 1: '):
+    key = 'my_user'
+    message = lines[i].replace('Person 1: ', '')
+  elif lines[i].startswith('Person 2: '):
+    key = 'other_user'
+    message = lines[i].replace('Person 2: ', '')
+  else:
+    print(lines[i])
+    raise 'invalid line'
 
-#   created_at = (now + timedelta(minutes=i)).isoformat()
-#   create_message(
-#     client=ddb,
-#     message_group_uuid=message_group_uuid,
-#     created_at=created_at,
-#     message=message,
-#     my_user_uuid=users[key]['uuid'],
-#     my_user_display_name=users[key]['display_name'],
-#     my_user_handle=users[key]['handle']
-#   )
+  created_at = (now + timedelta(minutes=i)).isoformat()
+  create_message(
+    client=ddb,
+    message_group_uuid=message_group_uuid,
+    created_at=created_at,
+    message=message,
+    my_user_uuid=users[key]['uuid'],
+    my_user_display_name=users[key]['display_name'],
+    my_user_handle=users[key]['handle']
+  )
