@@ -63,6 +63,7 @@ services:
     # We needed to add user:root to get this working.
     user: root
     command: "-jar DynamoDBLocal.jar -sharedDb -dbPath ./data"
+    restart: always
     image: "amazon/dynamodb-local:latest"
     container_name: dynamodb-local
     ports:
