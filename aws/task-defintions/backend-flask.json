@@ -35,7 +35,7 @@
           "logDriver": "awslogs",
           "options": {
               "awslogs-group": "cruddur",
-              "awslogs-region": "ca-central-1",
+              "awslogs-region": "ap-southeast-1",
               "awslogs-stream-prefix": "backend-flask"
           }
         },
@@ -43,7 +43,7 @@
           {"name": "OTEL_SERVICE_NAME", "value": "backend-flask"},
           {"name": "OTEL_EXPORTER_OTLP_ENDPOINT", "value": "https://api.honeycomb.io"},
           {"name": "AWS_COGNITO_USER_POOL_ID", "value": "ap-southeast-1_WE4vXvD0r"},
-          {"name": "AWS_COGNITO_USER_POOL_CLIENT_ID", "value": "4n4sr008trjhg3h56q234vhbaf"},
+          {"name": "AWS_COGNITO_USER_POOL_CLIENT_ID", "value": "n4sr008trjhg3h56q234vhbaf"},
           {"name": "FRONTEND_URL", "value": "*"},
           {"name": "BACKEND_URL", "value": "*"},
           {"name": "AWS_DEFAULT_REGION", "value": "ap-southeast-1"}
