@@ -1,4 +1,4 @@
-FROM python:3.10-slim-buster
+FROM 107936745393.dkr.ecr.ap-southeast-1.amazonaws.com/cruddur-python:3.10-slim-buster
 
 # Inside Container
 # make a new folder inside container

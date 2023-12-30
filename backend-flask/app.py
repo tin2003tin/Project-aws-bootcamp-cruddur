@@ -260,6 +260,10 @@ def data_users_short(handle):
   data = UsersShort.run(handle)
   return data, 200
 
+@app.route('/api/health-check')
+def health_check():
+  return {'success': True}, 200
+
 # Rollbar
 # @app.route('/rollbar/test')
 # def rollbar_test():
