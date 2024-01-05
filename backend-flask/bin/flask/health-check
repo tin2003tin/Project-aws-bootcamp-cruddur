@@ -15,4 +15,4 @@ try:
 # so we'll just catch on all even though this is a bad practice
 except Exception as e:
   print(e)
-  exit(1) 
+  exit(1) # false

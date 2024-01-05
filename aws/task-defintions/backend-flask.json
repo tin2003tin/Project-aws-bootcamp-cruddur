@@ -1,14 +1,6 @@
 {
-    "family": "backend-flask",
-    "executionRoleArn": "arn:aws:iam::107936745393:role/CruddurServiceExecutionRole",
-    "taskRoleArn": "arn:aws:iam::107936745393:role/CruddurTaskRole",
-    "networkMode": "awsvpc",
-    "cpu": "256",
-    "memory": "512",
-    "requiresCompatibilities": [ 
-      "FARGATE" 
-    ],
-    "containerDefinitions": [
+  "taskDefinitionArn": "arn:aws:ecs:ap-southeast-1:107936745393:task-definition/backend-flask:2",
+  "containerDefinitions": [
       {
         "name": "xray",
         "image": "public.ecr.aws/xray/aws-xray-daemon" ,
@@ -23,51 +15,146 @@
         ]
       },
       {
-        "name": "backend-flask",
-        "image": "107936745393.dkr.ecr.ap-southeast-1.amazonaws.com/backend-flask",
-        "essential": true,
-        "healthCheck": {
-          "command": [
-            "CMD-SHELL",
-            "python /backend-flask/bin/health-check"
+          "name": "backend-flask",
+          "image": "107936745393.dkr.ecr.ap-southeast-1.amazonaws.com/backend-flask",
+          "cpu": 0,
+          "portMappings": [
+              {
+                  "name": "backend-flask",
+                  "containerPort": 4567,
+                  "hostPort": 4567,
+                  "protocol": "tcp",
+                  "appProtocol": "http"
+              }
           ],
-          "interval": 30,
-          "timeout": 5,
-          "retries": 3,
-          "startPeriod": 60
-        },
-        "portMappings": [
-          {
-            "name": "backend-flask",
-            "containerPort": 4567,
-            "protocol": "tcp", 
-            "appProtocol": "http"
+          "essential": true,
+          "environment": [
+              {
+                  "name": "OTEL_SERVICE_NAME",
+                  "value": "backend-flask"
+              },
+              {
+                  "name": "AWS_DEFAULT_REGION",
+                  "value": "ap-southeast-1"
+              },
+              {
+                  "name": "BACKEND_URL",
+                  "value": "*"
+              },
+              {
+                  "name": "AWS_COGNITO_USER_POOL_ID",
+                  "value": "ap-southeast-1_WE4vXvD0r"
+              },
+              {
+                  "name": "AWS_COGNITO_USER_POOL_CLIENT_ID",
+                  "value": "n4sr008trjhg3h56q234vhbaf"
+              },
+              {
+                  "name": "OTEL_EXPORTER_OTLP_ENDPOINT",
+                  "value": "https://api.honeycomb.io"
+              },
+              {
+                  "name": "FRONTEND_URL",
+                  "value": "*"
+              }
+          ],
+          "mountPoints": [],
+          "volumesFrom": [],
+          "secrets": [
+              {
+                  "name": "AWS_ACCESS_KEY_ID",
+                  "valueFrom": "arn:aws:ssm:ap-southeast-1:107936745393:parameter/cruddur/backend-flask/AWS_ACCESS_KEY_ID"
+              },
+              {
+                  "name": "AWS_SECRET_ACCESS_KEY",
+                  "valueFrom": "arn:aws:ssm:ap-southeast-1:107936745393:parameter/cruddur/backend-flask/AWS_SECRET_ACCESS_KEY"
+              },
+              {
+                  "name": "CONNECTION_URL",
+                  "valueFrom": "arn:aws:ssm:ap-southeast-1:107936745393:parameter/cruddur/backend-flask/CONNECTION_URL"
+              },
+              {
+                  "name": "ROLLBAR_ACCESS_TOKEN",
+                  "valueFrom": "arn:aws:ssm:ap-southeast-1:107936745393:parameter/cruddur/backend-flask/ROLLBAR_ACCESS_TOKEN"
+              },
+              {
+                  "name": "OTEL_EXPORTER_OTLP_HEADERS",
+                  "valueFrom": "arn:aws:ssm:ap-southeast-1:107936745393:parameter/cruddur/backend-flask/OTEL_EXPORTER_OTLP_HEADERS"
+              }
+          ],
+          "logConfiguration": {
+              "logDriver": "awslogs",
+              "options": {
+                  "awslogs-group": "cruddur",
+                  "awslogs-region": "ap-southeast-1",
+                  "awslogs-stream-prefix": "backend-flask"
+              }
+          },
+          "healthCheck": {
+              "command": [
+                  "CMD-SHELL",
+                  "python /backend-flask/bin/flask/health-check"
+              ],
+              "interval": 30,
+              "timeout": 5,
+              "retries": 3,
+              "startPeriod": 60
           }
-        ],
-        "logConfiguration": {
-          "logDriver": "awslogs",
-          "options": {
-              "awslogs-group": "cruddur",
-              "awslogs-region": "ap-southeast-1",
-              "awslogs-stream-prefix": "backend-flask"
-          }
-        },
-        "environment": [
-          {"name": "OTEL_SERVICE_NAME", "value": "backend-flask"},
-          {"name": "OTEL_EXPORTER_OTLP_ENDPOINT", "value": "https://api.honeycomb.io"},
-          {"name": "AWS_COGNITO_USER_POOL_ID", "value": "${AWS_COGNITO_USER_POOL_ID}"},
-          {"name": "AWS_COGNITO_USER_POOL_CLIENT_ID", "value": "${AWS_COGNITO_USER_POOL_CLIENT_ID}" },
-          {"name": "FRONTEND_URL", "value": "*"},
-          {"name": "BACKEND_URL", "value": "*"},
-          {"name": "AWS_DEFAULT_REGION", "value": "ap-southeast-1"}
-        ],
-        "secrets": [
-          {"name": "AWS_ACCESS_KEY_ID"    , "valueFrom": "arn:aws:ssm:ap-southeast-1:107936745393:parameter/cruddur/backend-flask/AWS_ACCESS_KEY_ID"},
-          {"name": "AWS_SECRET_ACCESS_KEY", "valueFrom": "arn:aws:ssm:ap-southeast-1:107936745393:parameter/cruddur/backend-flask/AWS_SECRET_ACCESS_KEY"},
-          {"name": "CONNECTION_URL"       , "valueFrom": "arn:aws:ssm:ap-southeast-1:107936745393:parameter/cruddur/backend-flask/CONNECTION_URL" },
-          {"name": "ROLLBAR_ACCESS_TOKEN" , "valueFrom": "arn:aws:ssm:ap-southeast-1:107936745393:parameter/cruddur/backend-flask/ROLLBAR_ACCESS_TOKEN" },
-          {"name": "OTEL_EXPORTER_OTLP_HEADERS" , "valueFrom": "arn:aws:ssm:ap-southeast-1:107936745393:parameter/cruddur/backend-flask/OTEL_EXPORTER_OTLP_HEADERS" }
-        ]
       }
-    ]
-  }
+  ],
+  "family": "backend-flask",
+  "taskRoleArn": "arn:aws:iam::107936745393:role/CruddurTaskRole",
+  "executionRoleArn": "arn:aws:iam::107936745393:role/CruddurServiceExecutionRole",
+  "networkMode": "awsvpc",
+  "revision": 2,
+  "volumes": [],
+  "status": "ACTIVE",
+  "requiresAttributes": [
+      {
+          "name": "com.amazonaws.ecs.capability.logging-driver.awslogs"
+      },
+      {
+          "name": "ecs.capability.execution-role-awslogs"
+      },
+      {
+          "name": "com.amazonaws.ecs.capability.ecr-auth"
+      },
+      {
+          "name": "com.amazonaws.ecs.capability.docker-remote-api.1.19"
+      },
+      {
+          "name": "com.amazonaws.ecs.capability.task-iam-role"
+      },
+      {
+          "name": "ecs.capability.container-health-check"
+      },
+      {
+          "name": "ecs.capability.execution-role-ecr-pull"
+      },
+      {
+          "name": "ecs.capability.secrets.ssm.environment-variables"
+      },
+      {
+          "name": "com.amazonaws.ecs.capability.docker-remote-api.1.18"
+      },
+      {
+          "name": "ecs.capability.task-eni"
+      },
+      {
+          "name": "com.amazonaws.ecs.capability.docker-remote-api.1.29"
+      }
+  ],
+  "placementConstraints": [],
+  "compatibilities": [
+      "EC2",
+      "FARGATE"
+  ],
+  "requiresCompatibilities": [
+      "FARGATE"
+  ],
+  "cpu": "256",
+  "memory": "512",
+  "registeredAt": "2023-12-30T09:13:25.640Z",
+  "registeredBy": "arn:aws:iam::107936745393:user/Siriwid",
+  "tags": []
+}
