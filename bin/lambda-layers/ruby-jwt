@@ -1,7 +1,7 @@
 #! /usr/bin/bash
 
-gem i jwt -Ni /workspace/aws-bootcamp-cruddur-2023/lambda-layers/ruby-jwt/ruby/gems/2.7.0
-cd /workspace/aws-bootcamp-cruddur-2023/lambda-layers/ruby-jwt
+gem i jwt -Ni /tmp/lambda-layers/ruby-jwt/ruby/gems/2.7.0
+cd /tmp/lambda-layers/ruby-jwt
 
 zip -r lambda-layers . -x ".*" -x "*/.*"
 zipinfo -t lambda-layers
