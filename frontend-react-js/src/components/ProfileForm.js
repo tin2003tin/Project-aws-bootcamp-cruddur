@@ -15,10 +15,9 @@ export default function ProfileForm(props) {
   const s3uploadkey = async (extension)=> {
     console.log('ext',extension)
     try {
-      const gateway_url = "https://uzk9gnxcm5.execute-api.ap-southeast-1.amazonaws.com/avatars/key_upload"
+      const gateway_url = `https://uzk9gnxcm5.execute-api.ap-southeast-1.amazonaws.com/avatars/key_upload`
       await getAccessToken()
       const access_token = localStorage.getItem("access_token")
-      console.log(access_token)
       const json = {
         extension: extension
       }
@@ -26,7 +25,7 @@ export default function ProfileForm(props) {
         method: "POST",
         body: JSON.stringify(json),
         headers: {
-          'Origin': 'https://3000-tin2003tin-awsbootcampc-tqe5yhnm052.ws-us107.gitpod.io',
+          'Origin': process.env.REACT_APP_FRONTEND_URL,
           'Authorization': `Bearer ${access_token}`,
           'Accept': 'application/json',
           'Content-Type': 'application/json'
@@ -34,7 +33,6 @@ export default function ProfileForm(props) {
       })
       let data = await res.json();
       if (res.status === 200) {
-        console.log(data.url)
         return data.url
       } else {
         console.log(res)
@@ -54,22 +52,24 @@ export default function ProfileForm(props) {
     const fileparts = filename.split('.')
     const extension = fileparts[fileparts.length-1]
     const presignedurl = await s3uploadkey(extension)
-    // try {
-    //   console.log('s3upload')
-    //   const res = await fetch(presignedurl, {
-    //     method: "PUT",
-    //     body: file,
-    //     headers: {
-    //       'Content-Type': type
-    //   }})
-    //   if (res.status === 200) {
+    console.log(presignedurl)
+    try {
+      console.log('s3upload')
+      const res = await fetch(presignedurl, {
+        method: "PUT",
+        body: file,
+        headers: {
+          'Content-Type': type,
+          'Access-Control-Allow-Origin': 'https://3000-tin2003tin-awsbootcampc-ozv7cd7uw3m.ws-us107.gitpod.io'
+      }})
+      if (res.status === 200) {
         
-    //   } else {
-    //     console.log(res)
-    //   }
-    // } catch (err) {
-    //   console.log(err);
-    // }
+      } else {
+        console.log(res)
+      }
+    } catch (err) {
+      console.log(err);
+    }
   }
 
   const onsubmit = async (event) => {
