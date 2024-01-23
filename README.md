@@ -10,7 +10,7 @@
 #### - CDN : !!!AWS CloudFront 
 #### - Deploy : AWS ECS (Fargate aws)
 #### - Containers : AWS ECR
-#### - Infrastructure/Compute : AWS EC2, Lambda
+#### - Infrastructure/Compute : AWS EC2, AWS Lambda
 #### - Networking & Content Delivery : AWS Load Balancer, !!!AWS Route53, API Gateway, AWS CloudFront, AWS VPC 
 #### - CI/CD : !!!AWS CodePipline, !!!AWS CodeDeploy, !!!AWS CodeBuild
 #### - Log viewer : AWS CloudWatch, Honeycomb.io, Rollbar, AWS X-Ray
