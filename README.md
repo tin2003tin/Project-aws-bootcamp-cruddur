@@ -11,7 +11,7 @@
 #### - Deploy : AWS ECS (Fargate aws)
 #### - Containers : AWS ECR
 #### - Infrastructure/Compute : AWS EC2, Lambda
-#### - Networking & Content Delivery : AWS Load Balancer, !!!AWS Route53, API Gateway, CloudFront, VPC 
+#### - Networking & Content Delivery : AWS Load Balancer, !!!AWS Route53, API Gateway, AWS CloudFront, AWS VPC 
 #### - CI/CD : !!!AWS CodePipline, !!!AWS CodeDeploy, !!!AWS CodeBuild
 #### - Log viewer : AWS CloudWatch, Honeycomb.io, Rollbar, AWS X-Ray
 #### - Cost Management : AWS Billing and Cost Management
