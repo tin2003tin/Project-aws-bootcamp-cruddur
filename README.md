@@ -3,7 +3,7 @@
 ### Begin at 13 December 2023, Used AWS cloud provider for build a twitter clone (crudder) 
 #### - Frontend Framwork : React
 #### - Backend Framework : Flask
-#### - Authentication : AWS cognito
+#### - Authentication : AWS Cognito
 #### - Sql Database : AWS RDS (postgresql)
 #### - NoSql Database : AWS DynamoDB
 #### - Storage : AWS S3
