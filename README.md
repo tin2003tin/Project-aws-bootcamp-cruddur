@@ -1,5 +1,5 @@
 # FREE AWS Cloud Project Bootcamp
-@This is my thrid project from tutorial (https://github.co m/omenking/aws-bootcamp-cruddur-2023)
+@This is my thrid project from tutorial (https://github.com/omenking/aws-bootcamp-cruddur-2023)
 ### Begin at 13 December 2023, Used AWS cloud provider for build a twitter clone (crudder) 
 #### - Frontend Framwork : React
 #### - Backend Framework : Flask
