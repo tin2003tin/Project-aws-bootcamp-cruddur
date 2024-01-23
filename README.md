@@ -14,7 +14,7 @@
 #### - Networking & Content Delivery : AWS Load Balancer, !!!AWS Route53, API Gateway, CloudFront, VPC 
 #### - CI/CD : !!!AWS CodePipline, !!!AWS CodeDeploy, !!!AWS CodeBuild
 #### - Log viewer : AWS CloudWatch, Honeycomb.io, Rollbar, AWS X-Ray
-#### - Cost Manaagement : AWS Billing and Cost Management
+#### - Cost Management : AWS Billing and Cost Management
 ### Web link (Closed)
 #### - http://crudduralb-645155669.ap-southeast-1.elb.amazonaws.com:3000 (Frontend)
 #### - http://crudduralb-645155669.ap-southeast-1.elb.amazonaws.com:4567 (Backend)
