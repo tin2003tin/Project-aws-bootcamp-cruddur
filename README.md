@@ -7,7 +7,7 @@
 #### - Sql Database : AWS RDS (postgresql)
 #### - NoSql Database : AWS DynamoDB
 #### - Storage : AWS S3
-#### - CDN : AWS CloudFront 
+#### - CDN : !!!AWS CloudFront 
 #### - Deploy : AWS ECS (Fargate aws)
 #### - Containers : AWS ECR
 #### - Infrastructure/Compute : AWS EC2, Lambda
